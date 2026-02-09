@@ -1,59 +1,46 @@
 @import url(https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap);
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.card,
+.content,
+body {
+  overflow: hidden;
 }
 
 body {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: black;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.content {
-  position: relative;
-  width: 1000px;
-  height: 562px;
-  border-radius: 0;  /* ← REMOVED - yahi main culprit tha! */
-  overflow: hidden;
-  animation: 200s linear infinite brightness;
-}
-
-.container-full {
-  position: relative;
-  width: 1000px;
-  height: 562px;
+  padding: 0;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  animation: 200s linear infinite zoom-in;
-  transform-origin: center center;
+  background: black;
+  cursor: pointer;
 }
 
-/* Images with exact dimensions */
+.card,
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.card {
+  width: 1280px;
+  height: 720px;
+  margin: 0;
+  justify-content: center;
+}
+
+.container-full,
+.content {
+  width: 1000px;
+  height: 562px;
+}
+
 .backgroundImage {
   position: absolute;
   width: 1000px;
   height: 562px;
-  top: 0;
-  left: 0;
   object-fit: cover;
 }
 
@@ -61,42 +48,65 @@ body {
   position: absolute;
   width: 1000px;
   height: 562px;
-  top: 0;
-  left: 0;
   object-fit: cover;
   z-index: 2;
   animation: 200s linear infinite blur;
 }
 
-/* Cube setup */
-.cube {
-  width: 870px;
-  height: 190px;
-  position: relative;
-  transform-style: preserve-3d;
-  perspective: 480px;
-  perspective-origin: 51% 70%;
+.content {
+  border-radius: 0;
+  animation: 200s linear infinite brightness;
 }
 
+.container {
+  justify-content: center;
+}
+
+.container-full,
 .face {
-  position: absolute;
-  width: 870px;
-  height: 190px;
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: transparent;
-  border: 0;
+}
+
+.container-full {
+  margin: 0;
+  justify-content: center;
+  transform: scale(1);
+  animation: 200s linear infinite zoom-in;
+}
+
+.cube,
+.face {
+  width: 870px;
+  height: 190px;
+}
+
+.cube {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 480px;
+  transform-style: preserve-3d;
+  perspective-origin: 51% 70%;
+}
+
+.face,
+.hue {
+  position: absolute;
+}
+
+.face {
+  background: 0 0;
+  border: 0 solid #000;
   opacity: 0.7;
 }
 
-.top,
-.bottom {
+.bottom,
+.top {
   width: 870px;
   height: 870px;
 }
 
-/* Text styling */
 p {
   white-space: nowrap;
   overflow: hidden;
@@ -121,7 +131,6 @@ span {
     0 0 100px #ff0044;
 }
 
-/* 3D face transforms */
 .front {
   transform: translateZ(435px);
   display: none;
@@ -147,7 +156,7 @@ span {
   transform: translateY(-245px) rotateX(-90deg) scaleY(-1);
 }
 
-/* Seamless wall-to-wall text scrolling */
+/* Seamless wall-to-wall transition with exact sync */
 .left p {
   margin-left: 480px;
   animation: 200s linear infinite left;
@@ -181,25 +190,23 @@ span {
   }
 }
 
-/* Hue overlay */
 .hue {
-  position: absolute;
   top: 0;
   left: 0;
   z-index: 3;
   width: 100%;
   height: 100%;
   mix-blend-mode: overlay;
-  background: radial-gradient(ellipse at center, #1e5799 0%, #7db9e8 100%);
+  background: #1e5799;
+  background: radial-gradient(ellipse at center, #1e5799 0, #7db9e8 100%);
   opacity: 1;
-  pointer-events: none;
 }
 
 .hue.animated {
+  -webkit-animation: 8s infinite filter-animation;
   animation: 8s infinite filter-animation;
 }
 
-/* Reflection */
 .container-reflect {
   position: absolute;
   display: flex;
@@ -230,9 +237,9 @@ span {
   transform: scaleY(70%);
 }
 
-/* Animations */
 @keyframes filter-animation {
-  0%, 100% {
+  0%,
+  100% {
     filter: hue-rotate(0deg);
   }
   50% {
@@ -272,7 +279,7 @@ span {
   .content {
     width: 95vw !important;
     height: calc(95vw * 0.562) !important;
-    border-radius: 0;  /* ← No radius on mobile either */
+    border-radius: 0;
   }
   
   .container-full {

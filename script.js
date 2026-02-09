@@ -1,26 +1,11 @@
-// MAAHI message - repeated 20 times for seamless loop
+// MAAHI message - only 5 copies
 const maahiMessage = `<p>MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
-MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
 MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
 MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
 MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
 MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     </p>`;
 
-// Insert message into text divs
+// Function to insert message into divs
 function insertPoemIntoDivs() {
   const textDivs = document.querySelectorAll(".text");
   textDivs.forEach((div) => {
@@ -28,24 +13,21 @@ function insertPoemIntoDivs() {
   });
 }
 
-// Responsive sizing - NO transform scale (prevents blur)
+// Call the function when the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", insertPoemIntoDivs);
+
+const contentDiv = document.querySelector(".content");
+
 function adjustContentSize() {
-  const contentDiv = document.querySelector(".content");
   const viewportWidth = window.innerWidth;
-  
-  // Only apply scaling on desktop if needed
-  if (viewportWidth > 1100 && viewportWidth < 1280) {
-    const scaleFactor = viewportWidth / 1280;
-    contentDiv.style.transform = `scale(${scaleFactor})`;
-  } else if (viewportWidth >= 1280) {
-    contentDiv.style.transform = 'scale(1)';
-  }
-  // Mobile/tablet handled by CSS media queries
+  const baseWidth = 1000;
+  const scaleFactor =
+    viewportWidth < baseWidth ? (viewportWidth / baseWidth) * 0.8 : 1;
+  contentDiv.style.transform = `scale(${scaleFactor})`;
 }
 
 // Restart all animations on click/tap
-function restartAllAnimations(e) {
-  // Prevent multiple rapid triggers
+function restartAllAnimations() {
   if (restartAllAnimations.isRestarting) return;
   restartAllAnimations.isRestarting = true;
   
@@ -97,17 +79,10 @@ function restartAllAnimations(e) {
     hue.style.animation = '8s infinite filter-animation';
   }
   
-  // Reset flag after 100ms
   setTimeout(() => {
     restartAllAnimations.isRestarting = false;
   }, 100);
 }
-
-// Event listeners
-document.addEventListener("DOMContentLoaded", () => {
-  insertPoemIntoDivs();
-  adjustContentSize();
-});
 
 document.body.addEventListener('click', restartAllAnimations);
 document.body.addEventListener('touchend', restartAllAnimations);
