@@ -1,61 +1,116 @@
-const message = `
-  <p>MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span> 　　　 
-   MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span> 　　　 </p>
-`;
+// MAAHI message - repeated 20 times for seamless loop
+const maahiMessage = `<p>MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     
+MAAHI! you must be aware of the fact that you are the <span>most beautiful person</span>     </p>`;
 
-function insertMessage() {
-  document.querySelectorAll('.text').forEach(div => {
-    div.innerHTML = message;
+// Insert message into text divs
+function insertPoemIntoDivs() {
+  const textDivs = document.querySelectorAll(".text");
+  textDivs.forEach((div) => {
+    div.innerHTML = maahiMessage;
   });
 }
 
+// Responsive sizing - NO transform scale (prevents blur)
 function adjustContentSize() {
-  const content = document.querySelector('.content');
-  if (!content) return;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  if (vh / vw > 1.65) {
-    content.style.width = '100%';
-    content.style.height = '100%';
-    content.style.transform = 'scale(1)';
-  } else {
-    const scale = Math.min(vw / 1000, vh / 562) * 0.96;
-    content.style.transform = `scale(${scale})`;
-    content.style.width = '1000px';
-    content.style.height = '562px';
+  const contentDiv = document.querySelector(".content");
+  const viewportWidth = window.innerWidth;
+  
+  // Only apply scaling on desktop if needed
+  if (viewportWidth > 1100 && viewportWidth < 1280) {
+    const scaleFactor = viewportWidth / 1280;
+    contentDiv.style.transform = `scale(${scaleFactor})`;
+  } else if (viewportWidth >= 1280) {
+    contentDiv.style.transform = 'scale(1)';
   }
+  // Mobile/tablet handled by CSS media queries
 }
 
-function restartAnimation() {
-  // Sabhi text paragraphs ko select karo
-  const textElements = document.querySelectorAll('.text p');
+// Restart all animations on click/tap
+function restartAllAnimations(e) {
+  // Prevent multiple rapid triggers
+  if (restartAllAnimations.isRestarting) return;
+  restartAllAnimations.isRestarting = true;
   
+  // Text animations
+  const textElements = document.querySelectorAll('.text p');
   textElements.forEach(p => {
-    // Animation remove karo
+    const parent = p.closest('.left, .back, .right');
     p.style.animation = 'none';
-    
-    // Force reflow (browser ko refresh karne ke liye)
     void p.offsetWidth;
     
-    // Animation wapas lagao
-    const parent = p.closest('.left, .back, .right');
-    if (parent.classList.contains('left')) {
-      p.style.animation = 'scrollLeft 120s linear 1 forwards';
-    } else if (parent.classList.contains('back')) {
-      p.style.animation = 'scrollBack 125s linear 1 forwards';
-    } else if (parent.classList.contains('right')) {
-      p.style.animation = 'scrollRight 130s linear 1 forwards';
+    if (parent && parent.classList.contains('left')) {
+      p.style.animation = '200s linear infinite left';
+    } else if (parent && parent.classList.contains('back')) {
+      p.style.animation = '200s linear infinite back';
+    } else if (parent && parent.classList.contains('right')) {
+      p.style.animation = '200s linear infinite right';
     }
   });
+  
+  // Container-full zoom
+  const containerFull = document.querySelector('.container-full');
+  if (containerFull) {
+    containerFull.style.animation = 'none';
+    void containerFull.offsetWidth;
+    containerFull.style.animation = '200s linear infinite zoom-in';
+  }
+  
+  // Boy image blur
+  const boyImage = document.querySelector('.boyImage');
+  if (boyImage) {
+    boyImage.style.animation = 'none';
+    void boyImage.offsetWidth;
+    boyImage.style.animation = '200s linear infinite blur';
+  }
+  
+  // Content brightness
+  const content = document.querySelector('.content');
+  if (content) {
+    content.style.animation = 'none';
+    void content.offsetWidth;
+    content.style.animation = '200s linear infinite brightness';
+  }
+  
+  // Hue filter
+  const hue = document.querySelector('.hue.animated');
+  if (hue) {
+    hue.style.animation = 'none';
+    void hue.offsetWidth;
+    hue.style.animation = '8s infinite filter-animation';
+  }
+  
+  // Reset flag after 100ms
+  setTimeout(() => {
+    restartAllAnimations.isRestarting = false;
+  }, 100);
 }
 
-// Click/tap event listener
-document.body.addEventListener('click', restartAnimation);
-document.body.addEventListener('touchend', restartAnimation);
-
-window.addEventListener('load', () => {
-  insertMessage();
+// Event listeners
+document.addEventListener("DOMContentLoaded", () => {
+  insertPoemIntoDivs();
   adjustContentSize();
 });
 
-window.addEventListener('resize', adjustContentSize);
+document.body.addEventListener('click', restartAllAnimations);
+document.body.addEventListener('touchend', restartAllAnimations);
+
+window.addEventListener("load", adjustContentSize);
+window.addEventListener("resize", adjustContentSize);
